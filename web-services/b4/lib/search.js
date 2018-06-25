@@ -11,7 +11,7 @@ module.exports = (app, es) => {
      * Example :/api/search/books/authors/Twain
      */
     app.get('/api/search/books/:field/:query', (req, res) => {
-        // console.log(`Searching books on ${req.params.field} ==  ${req.params.query} at ${esurl}`);
+        console.log(`Searching books on ${req.params.field} ==  ${req.params.query} at ${esurl}`);
         const esReqBody = {
             size: 10,
             query: {
