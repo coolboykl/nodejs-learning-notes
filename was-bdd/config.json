@@ -1,0 +1,8 @@
+{
+    "port": 60703,
+    "es": {
+        "host": "localhost",
+        "port": 9200,
+        "was_index": "was"
+    }
+}

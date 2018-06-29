@@ -1,0 +1,23 @@
+{
+  "name": "was-bdd",
+  "version": "1.0.0",
+  "description": "Wallet as a Service with BDD Testing with Cucumber.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cucumber": "./node_modules/.bin/cucumber-js ./bdd/features -r ./bdd/steps"
+  },
+  "author": "James Khoo",
+  "license": "MIT",
+  "devDependencies": {
+    "cucumber": "^4.2.1"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "nconf": "^0.10.0",
+    "nodemon": "^1.17.5",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
