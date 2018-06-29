@@ -10,7 +10,7 @@ module.exports = (app, es) => {
     /**
      * To create new Bundle
      * curl -X POST http://BaseURL/api/bundle?name=<name>
-     * BUNDLE ID =  AODQIWQB5yFmbFTxbybP
+     * BUNDLE ID =  wvz9NWQB1rX-nD7If6gR - myBundle
      */
 
     app.post('/api/bundle', (req, res) => {
@@ -80,24 +80,35 @@ module.exports = (app, es) => {
      * Put a book into a bundle by its id
      * curl -X PUT http://baseURL/api/bundle/<id>/book/<pgid>
      */
-    app.put('/api/bundle/:id/book/:pgid', async(req, res) => {
+    app.put('/api/bundle/:id/book/:pgid', async (req, res) => {
         const bundleURL = `${url}/${req.params.id}`;
-        const bookUrl = `http://${es.host}:${es.port}` + 
-                        `/${es.books_index}/book/${req.params.pgid}`;
+        const bookUrl = `http://${es.host}:${es.port}` +
+            `/${es.books_index}/book/${req.params.pgid}`;
 
         try {
             const [bundleRes, bookRes] = await Promise.all([
-                rp({url: bundleURL, json:true}),
-                rp({url:bookUrl, json:true}),
+                rp({
+                    url: bundleURL,
+                    json: true
+                }),
+                rp({
+                    url: bookUrl,
+                    json: true
+                }),
             ])
 
-            const {_source: bundle, _version: version} = bundleRes;
-            const {_source: book} = bookRes;
+            const {
+                _source: bundle,
+                _version: version
+            } = bundleRes;
+            const {
+                _source: book
+            } = bookRes;
 
-            const idx = bundle.books.findIndex(book => book.id === req.params.pgid);
+            const idx = bundle.books.findIndex(book => book.id == req.params.pgid);
 
-            if(idx === -1) {
-                bundle.books.push( {
+            if (idx === -1) {
+                bundle.books.push({
                     id: book.id,
                     title: book.title,
                 });
@@ -105,7 +116,9 @@ module.exports = (app, es) => {
 
             const esResBody = await rp.put({
                 url: bundleURL,
-                qs: {version},
+                qs: {
+                    version
+                },
                 body: bundle,
                 json: true,
             })
@@ -116,6 +129,62 @@ module.exports = (app, es) => {
             res.status(esResErr.statusCode || 502).json(esResErr.error);
         }
     });
+
+
+
+    /**
+     * Remove a book into a bundle by its id
+     * curl -X DELETE http://baseURL/api/bundle/<id>/book/<pgid>
+     */
+    app.delete('/api/bundle/:id/book/:pgid', async (req, res) => {
+        const bundleUrl = `${url}/${req.params.id}`;
+    
+        try {
+    
+          const {_source: bundle, _version: version} =
+            await rp({url: bundleUrl, json: true});
+    
+          const idx = bundle.books.findIndex(book => book.id == req.params.pgid);
+          if (idx === -1) {
+            throw {
+              statusCode: 409,
+              error: {
+                reason: 'Conflict - Bundle does not contain that book.',
+              }
+            };
+          }
+    
+          bundle.books.splice(idx, 1);
+    
+          const esResBody = await rp.put({
+            url: bundleUrl,
+            qs: { version },
+            body: bundle,
+            json: true,
+          });
+          res.status(200).json(esResBody);
+        } catch (esResErr) {
+          res.status(esResErr.statusCode || 502).json(esResErr.error);
+        }
+      });
+
+    /**
+     * Delete a bundle entirely
+     * curl -X DELETE http://<host>:<port>/api/bundle/<id>
+     */
+    app.delete('/api/bundle/:id', async (req, res) => {
+        const bundleURL = `${url}/${req.params.id}`;
+        const options = {
+            url: bundleURL,
+            json: true,
+        }
+        try {
+            const bundleRes = await (rp.delete(options));
+            res.status(200).json(bundleRes);
+        } catch (esResErr) {
+            res.status(esResErr.statusCode || 502).json(esResErr.error);
+        }
+    })
 
 
 };
