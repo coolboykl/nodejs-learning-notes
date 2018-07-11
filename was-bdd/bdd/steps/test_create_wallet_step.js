@@ -5,17 +5,17 @@ const assert = require('assert');
 
 defineSupportCode(function ( {Given, Then,When}) {
     Given('I wants to use Kiple Wallet', function () {
-        // Noting to do here, return true
+        // To perform some initialization
         return true;
     });
 
-    When('I wants proceed to create Wallet with {string} as my user name, {string} as my password and {int} as my wallet balance', function (string, string2, int) {
+    When('I proceed to create Wallet with {string} as my user name, {string} as my password and deposit {float} as my initial wallet balance', function (username, password, amount) {
         // Write code here that turns the phrase above into concrete actions
         return 'pending';
     });
 
 
-    Then('My wallet is created with {string} as wallet primary userid, and {int} as wallet balance', function (string, int) {
+    Then('My wallet is created with {string} as wallet primary userid, and {float} as wallet balance', function (username, amount) {
         // Write code here that turns the phrase above into concrete actions
         return 'pending';
     });
