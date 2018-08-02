@@ -14,7 +14,7 @@ Feature: Transfer money between wallets
       Scenario Outline: Transfer Money - Negative use cases 
         Given UserA have wallet balance of <amountA> and UserB have a wallet balance of <amountB>
         When  UserA transfer <transferAmount> to UserB
-        Then  System should throw "<error>"
+        Then  App should show "<error>"
         
         Examples:
         | amountA | amountB | transferAmount| error                        | 

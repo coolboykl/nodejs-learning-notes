@@ -6,20 +6,22 @@
   "scripts": {
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "cucumber": "./node_modules/.bin/cucumber-js ./bdd/features -r ./bdd/steps"
+    "cucumber": "./node_modules/.bin/cucumber-js --format json:./testrun.json ./bdd/features -r ./bdd/steps"
   },
   "author": "James Khoo",
   "license": "MIT",
   "devDependencies": {
-    "cucumber": "^4.2.1"
+    "cucumber": "^4.2.1",
+    "cucumber-html-reporter": "^4.0.3"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "morgan": "^1.9.0",
     "nconf": "^0.10.0",
-    "nodemon": "^1.17.5",
+    "nodemon": "^1.18.1",
     "request": "^2.87.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "thread-sleep": "^2.1.0"
   }
 }
